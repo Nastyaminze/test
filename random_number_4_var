@@ -1,0 +1,117 @@
+# Угадай число
+
+import random       # Для генерации случайного числа
+
+lowDigit = 10       # Нижняя граница случайного числа
+hidhDigit = 50      # Верхняя граница случайного числа
+digit = 0           # Загаданное компьютером число
+
+countInput = 0      # Сколько уже было попыток угадать 
+win = False         # Угадал текущее число?
+playGame = True     # Продолжается ли игра?
+x = 0               # Число, котрое вводит пользователь
+startScore = 100    # Начальное ко-во очков
+score = 0           # Текущее ко-во очков
+maxScore = 0        # Максимальное за сессию игры
+
+print("""Приветсвуем в нашей игре на удачу! Поиграйте с компьютером.
+Для выхода из игры, наберите - 0. Для продолжения - 1.
+Удачи!""")
+print('-' * 10)
+# ===============================================================================================
+
+# ------------------- MainLoop - ГЛАВНЫЙ ЦИКЛ
+while (playGame):
+    digit = random.randint(lowDigit, hidhDigit)
+    # print(f'Загаданное число: {digit}')
+    countInput = 0
+    score = startScore
+    print('Компьютер загадал число, попробуйте отгадать!')
+    while (not win and score > 0):
+        print(f'Заработано очков: {score}')
+        print(f'Рекорд: {score}')
+            
+    
+    # ------------------- ВНУТРЕННИЙ ЦИКЛ
+                            
+        x = ''
+        while (not x.isdigit()):            # Пока в строке не число:
+            x = input(f'Введите число от {lowDigit} до {hidhDigit}:')
+            if (not x.isdigit()):           # .isdigit() проверка, является ли строка числом
+                print('.' * 27 + 'Введите, пожалуйста, число.')
+
+        x = int(x)
+        if (x == digit):
+            win = True
+        else:
+            # ------------------- Подсказки во время игры
+            length = abs(x - digit)
+            if (length == 0 ):
+                print('')
+            elif (length < 3 ):
+                print('Очень горячо!')
+            elif (length < 5):
+                print('Горячо!')
+            elif (length < 10):
+                print('Тепло')
+            elif (length < 15):
+                print('Прохладно')
+            elif (length < 20):
+                print('Холодно')    
+            else:
+                print('Ледяной ветер') 
+           
+                
+            # ------------------- Помощь друга и отнимание очков
+            if (countInput == 7):
+                score -= 10
+                if (digit % 2 == 0):
+                    print('Число четное')
+                else:
+                    print('Число нечетное')
+            elif (countInput == 6):
+                score -= 8
+                if (digit % 3 == 0):
+                    print('Число делится на 3')
+                else:
+                    print('Число не делится на 3')
+            elif (countInput == 5):
+                score -= 4
+                if (digit % 4 == 0):
+                    print('Число делится на 4')
+                else:
+                    print('Число не делится на 4')
+            elif (countInput > 2 and countInput < 5):
+                score -= 2
+                if (x > digit):
+                    print('Загаданное число МЕНЬШЕ вышего')
+                else:
+                    print('Загаданное число БОЛЬШЕ вашего')
+            score -= 5
+        countInput += 1
+        print('-' * 20)
+
+        
+        if countInput == 5:
+            key = input('Закончим?: ')
+            if (key == '0'):
+                playGame = False
+            elif (key == '1'):
+                win = False
+            
+    if (x == digit):
+        print('Победа! Поздравляем!')
+            # ------------------- СБРАСЫВАЕМ win
+    else:
+        print('Закончились очки. Вы проиграли.')
+            
+
+    # ------------------- Возможность закончить игру, если надоело
+    key = input('Закончим?: ')
+    if (key == '0'):
+        playGame = False
+    elif (key == '1'):
+        win = False
+        # ------------------- Запись максимального ко-ва очков, которое достиг игрок    
+    if (score > maxScore):
+        maxScore = score
